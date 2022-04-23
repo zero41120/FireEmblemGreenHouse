@@ -49,7 +49,7 @@ export const YieldDisplay = (prop: YieldDisplayProps) => {
 
   return (
     <>
-      <Stack height={750}>
+      <Stack height={730}>
         <Typography variant="h6">{`Stat Boost Items`}</Typography>
         <Box height={225}>
           <DataGrid
@@ -62,7 +62,13 @@ export const YieldDisplay = (prop: YieldDisplayProps) => {
           ></DataGrid>
         </Box>
         <Typography variant="h6">{`Items`}</Typography>
-        <DataGrid density="compact" rows={itemRows} columns={columns} pageSize={15}></DataGrid>
+        <DataGrid
+          sx={{ fontFamily: 'monospace', whiteSpace: 'pre!important' }}
+          density="compact"
+          rows={itemRows}
+          columns={columns}
+          pageSize={15}
+        ></DataGrid>
       </Stack>
     </>
   );
