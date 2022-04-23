@@ -4,6 +4,7 @@ import { Cultivation } from '../data/cultivation';
 
 export type CultivationSelectorProp = {
   onSelect: (tier: number) => void;
+  triggerReset: boolean;
 };
 
 export const CultivationSelector = (prop: CultivationSelectorProp) => {
@@ -12,6 +13,8 @@ export const CultivationSelector = (prop: CultivationSelectorProp) => {
     setSelected(event.target.value);
     prop.onSelect(event.target.value);
   };
+  if (prop.triggerReset && selected !== Cultivation.None) setSelected(Cultivation.None);
+
   return (
     <FormControl fullWidth>
       <InputLabel id="cultivation-selector-label">Cultivation</InputLabel>

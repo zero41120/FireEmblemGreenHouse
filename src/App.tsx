@@ -5,6 +5,12 @@ import './App.css';
 import { GreenHouse } from './component/green-house';
 
 export const themeOptions: ThemeOptions = {
+  palette: {
+    mode: 'light',
+    primary: {
+      main: '#3C3C3C',
+    },
+  },
   typography: {
     fontFamily: 'Space Mono',
   },

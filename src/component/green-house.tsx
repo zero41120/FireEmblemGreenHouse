@@ -1,4 +1,4 @@
-import { Grid, Link, Stack, Typography } from '@mui/material';
+import { Button, Grid, Link, Stack, Typography } from '@mui/material';
 import React, { useEffect } from 'react';
 import { SeedName } from '../data/seeds';
 import { gardenService, YieldMetadata } from '../service/garden-service';
@@ -9,6 +9,7 @@ import { YieldDisplay } from './yield-display';
 
 export const GreenHouse = () => {
   const [score, setScore] = React.useState(0);
+  const [shouldReset, setShouldReset] = React.useState(false);
   const [yieldItem, setYieldItem] = React.useState<YieldMetadata>({
     items: { good: [], bad: [] },
     yieldNumber: 0,
@@ -25,13 +26,19 @@ export const GreenHouse = () => {
   }, []);
 
   const handleSelectSeed = (seed: SeedName, index: number) => {
-    console.log(`Seed ${index} selected: ${seed}`);
+    setShouldReset(false);
     gardenService.selectSeed(seed, index);
   };
   const handleCultivationSelect = (tier: number) => {
-    console.log(`Cultivation selected: ${tier}`);
+    setShouldReset(false);
     gardenService.setCultivation(tier);
   };
+
+  const resetSelection = () => {
+    setShouldReset(true);
+    gardenService.resetSelection();
+  };
+
   return (
     <Grid container spacing={1} mt={1} sx={{ border: '2px solid #3c3c3c', padding: '10px' }}>
       <Grid item xs={12} md={4}>
@@ -39,9 +46,12 @@ export const GreenHouse = () => {
           <Typography variant="h4">{`Score: ${score}`}</Typography>
           <Typography variant="overline">{`Produce: ${yieldItem.yieldNumber} items`}</Typography>
           {Array.from(new Array(5)).map((_, i) => (
-            <SeedSelector key={i} onSelect={(seed: any) => handleSelectSeed(seed, i)} />
+            <SeedSelector triggerReset={shouldReset} key={i} onSelect={(seed: any) => handleSelectSeed(seed, i)} />
           ))}
-          <CultivationSelector onSelect={handleCultivationSelect} />
+          <CultivationSelector triggerReset={shouldReset} onSelect={handleCultivationSelect} />
+          <Button variant="outlined" onClick={resetSelection}>
+            Reset
+          </Button>
           <Typography variant="caption">
             * Higher Cultivation produces more item and increase stat-boost item chance
           </Typography>

@@ -72,6 +72,10 @@ export class GardenService extends Stateful<GardenServiceState> {
     };
   }
 
+  resetSelection() {
+    this.setState({ selectedSeeds: {}, cultivationTier: 0 });
+  }
+
   private getYieldItemCount(cultivationTier: number, seedNumber: number) {
     return CultivationYieldAddition[cultivationTier] + seedNumber;
   }

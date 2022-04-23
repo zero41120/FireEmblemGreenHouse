@@ -3,6 +3,7 @@ import React from 'react';
 import { seedTable } from '../data/seeds';
 
 export type SeedSelectorProp = {
+  triggerReset: boolean;
   onSelect: (seed: string) => void;
 };
 export const SeedSelector = (prop: SeedSelectorProp) => {
@@ -12,6 +13,9 @@ export const SeedSelector = (prop: SeedSelectorProp) => {
     setSeed(event.target.value);
     prop.onSelect(event.target.value);
   };
+
+  if (prop.triggerReset && seed !== 'None') setSeed('None');
+
   const title = `Seed`;
   return (
     <FormControl fullWidth>
