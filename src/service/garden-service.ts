@@ -36,8 +36,12 @@ export class GardenService extends Stateful<GardenServiceState> {
     this.setState({ cultivationTier: cultivation as number });
   }
 
-  calculateScore() {
-    const seeds = Object.values(this.getState().selectedSeeds);
+  getSelectedSeeds(): Seed[] {
+    return Object.values(this.getState().selectedSeeds);
+  }
+
+  calculateScore(seeds?: Seed[]) {
+    if (!seeds) seeds = this.getSelectedSeeds();
     if (!seeds.length) return 0;
     const cultivation = this.getState().cultivationTier;
     const rankSum = seeds.reduce((sum, seed) => sum + seed.rank, 0);
@@ -47,6 +51,15 @@ export class GardenService extends Stateful<GardenServiceState> {
     const cultivationValue = (cultivation + 4) * 2;
     console.log(rankSum, gradeSum, rankValue, gradeValue, cultivationValue);
     return rankValue + gradeValue + cultivationValue;
+  }
+
+  calculateSuggestion(): ItemChance {
+    const seeds = this.getSelectedSeeds();
+    if (seeds.length !== 4) return {} as ItemChance;
+    return Object.entries(seedTable).reduce((acc, [seedName, seed]) => {
+      acc[seedName] = this.calculateScore([...seeds, seed]);
+      return acc;
+    }, {} as ItemChance);
   }
 
   getItemByScore(score: number): YieldMetadata {

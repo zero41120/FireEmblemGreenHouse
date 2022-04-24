@@ -1,9 +1,11 @@
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import React from 'react';
 import { seedTable } from '../data/seeds';
+import { ItemChance } from '../type/common';
 
 export type SeedSelectorProp = {
   triggerReset: boolean;
+  suggestion?: ItemChance;
   onSelect: (seed: string) => void;
 };
 export const SeedSelector = (prop: SeedSelectorProp) => {
@@ -28,11 +30,14 @@ export const SeedSelector = (prop: SeedSelectorProp) => {
         onChange={handleChange}
       >
         <MenuItem value="None">None</MenuItem>
-        {options.map((option) => (
-          <MenuItem key={option} value={option} sx={{ fontFamily: 'monospace', whiteSpace: 'pre' }}>
-            {`${seedTable[option].statBoost.effect} | ${option} ${'★'.repeat(seedTable[option].grade)}`}
-          </MenuItem>
-        ))}
+        {options.map((option) => {
+          const score = prop?.suggestion?.[option] ?? '';
+          return (
+            <MenuItem key={option} value={option} sx={{ fontFamily: 'monospace', whiteSpace: 'pre' }}>
+              {`${score} ${seedTable[option].statBoost.effect} | ${option} ${'★'.repeat(seedTable[option].grade)}`}
+            </MenuItem>
+          );
+        })}
       </Select>
     </FormControl>
   );
